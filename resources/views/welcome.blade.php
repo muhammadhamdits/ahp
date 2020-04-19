@@ -79,9 +79,9 @@
 
             <div class="card-body">
                 <div class="tab-content p-0">
-                    <div class="chart tab-pane active" id="revenue-chart" style="position: relative; height: 300px;">
+                    <div class="chart tab-pane active" id="result" style="position: relative; height: 300px;">
                         @if($status == true)
-                            <canvas id="revenue-chart-canvas" height="300" style="height: 300px;">
+                            <canvas id="result-canvas" width="400" height="300">
                             </canvas>
                         @else
                             <div class="text-center">
@@ -94,4 +94,75 @@
         </div>
     </section>
 </div>
+@endsection
+
+@section('script')
+<script>
+    var ctx = document.getElementById('result-canvas').getContext('2d');
+    var label = [
+        @foreach($alternatif as $a)
+            "{{ $a->alternatif }}",
+        @endforeach
+    ];
+    var data = [
+        @foreach($prioritasAkhir as $a)
+            {{ $a }},
+        @endforeach
+    ]
+    // console.log(label);
+    var myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: label,
+            datasets: [{
+                label: '# of Votes',
+                data: data,
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
+        }
+    });
+    // var barChartCanvas = $('#barChart').get(0).getContext('2d')
+    // var barChartData = jQuery.extend(true, {}, areaChartData)
+    // var temp0 = areaChartData.datasets[0]
+    // var temp1 = areaChartData.datasets[1]
+    // barChartData.datasets[0] = temp1
+    // barChartData.datasets[1] = temp0
+
+    // var barChartOptions = {
+    //   responsive              : true,
+    //   maintainAspectRatio     : false,
+    //   datasetFill             : false
+    // }
+
+    // var barChart = new Chart(barChartCanvas, {
+    //   type: 'bar', 
+    //   data: barChartData,
+    //   options: barChartOptions
+    // })
+</script>
 @endsection

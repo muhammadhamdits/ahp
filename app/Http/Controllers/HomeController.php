@@ -105,8 +105,10 @@ class HomeController extends Controller
                 $prioritasAkhir[] = $rata;
             }
         }
+        // dd($prioritasAkhir);
+        $alternatif = Alternatif::all();
         
-        return view('welcome', compact('status', 'prioritasAkhir'));
+        return view('welcome', compact('status', 'prioritasAkhir', 'alternatif'));
     }
     
     public function analisisBerpasangan($A){
