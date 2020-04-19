@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Alternatif;
+use App\Kriteria;
+use App\PerbandinganAlternatif;
 use Illuminate\Http\Request;
 
 class AlternatifController extends Controller
@@ -38,7 +40,28 @@ class AlternatifController extends Controller
     {
         $alternatif = Alternatif::create([
             'alternatif' => $request->name
-        ])->save();
+        ]);
+        $id = $alternatif->id;
+        $alternatif->save();
+        
+        $kriterias = Kriteria::all();
+        $alternatif = Alternatif::all();
+        if($kriterias->count() > 0){
+            foreach($kriterias as $k){
+                if($alternatif->count() > 0){
+                    foreach($alternatif as $a){
+                        if($a->id != $id){
+                            PerbandinganAlternatif::create([
+                                'alternatif_id_1' => $a->id,
+                                'alternatif_id_2' => $id,
+                                'kriteria_id' => $k->id,
+                                'pembanding_id' => 1
+                            ])->save();
+                        }
+                    }
+                }
+            }
+        }
 
         return redirect(route('alternatif.index'));
     }

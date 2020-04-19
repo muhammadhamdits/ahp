@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Kriteria;
 use App\Pembanding;
+use App\Alternatif;
 use App\PerbandinganKriteria;
+use App\PerbandinganAlternatif;
 use Illuminate\Http\Request;
 
 class KriteriaController extends Controller
@@ -19,7 +21,8 @@ class KriteriaController extends Controller
         $datas = Kriteria::all();
         $perbandingans = PerbandinganKriteria::all();
         $pembandings = Pembanding::all();
-        return view('kriteria', compact('datas', 'perbandingans', 'pembandings'));
+        $alternatifs = PerbandinganAlternatif::all();
+        return view('kriteria', compact('datas', 'perbandingans', 'pembandings', 'alternatifs'));
     }
 
     /**
@@ -47,14 +50,29 @@ class KriteriaController extends Controller
         $kriteria->save();
         
         $kriteria = Kriteria::all();
+        $alternatif = Alternatif::all();
         if($kriteria->count() > 0){
             foreach($kriteria as $k){
                 if($k->id != $id){
                     PerbandinganKriteria::create([
                         'kriteria_id_1' => $k->id,
                         'kriteria_id_2' => $id,
-                        'pembanding_id' => 1,
+                        'pembanding_id' => 1
                     ])->save();
+                }
+            }
+        }
+        if($alternatif->count() > 0){
+            foreach($alternatif as $a){
+                foreach($alternatif as $b){
+                    if($a->id < $b->id){
+                        PerbandinganAlternatif::create([
+                            'alternatif_id_1' => $a->id,
+                            'alternatif_id_2' => $b->id,
+                            'kriteria_id' => $id,
+                            'pembanding_id' => 1
+                        ])->save();
+                    }
                 }
             }
         }

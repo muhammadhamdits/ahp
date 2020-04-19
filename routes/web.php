@@ -29,3 +29,5 @@ Route::post('/alternatif/update', 'AlternatifController@update')->name('alternat
 
 Route::get('/perbandinganKriteria', 'PerbandinganKriteriaController@index')->name('perbandinganKriteria.index');
 Route::post('/perbandinganKriteria', 'PerbandinganKriteriaController@update')->name('perbandinganKriteria.update');
+
+Route::post('/perbandinganAlternatif', 'PerbandinganAlternatifController@update')->name('perbandinganAlternatif.update');

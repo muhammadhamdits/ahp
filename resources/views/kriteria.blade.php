@@ -42,6 +42,7 @@
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $data->kriteria }}</td>
                                 <td>
+                                    <button class="btn btn-info perbandingan" data-id="{{ $data->id }}" data-toggle="modal" data-target="#modalPerbandinganAlternatif">Perbandingan</button>
                                     <button class="btn btn-warning edit" data-id="{{ $data->id }}" data-nama="{{ $data->kriteria }}" data-toggle="modal" data-target="#modalEdit">Edit</button>
                                     <form action="{{ route('kriteria.delete', [$data]) }}" method="post" style="display: inline-block">
                                         @csrf
@@ -112,7 +113,7 @@
   </div>
 </div>
 
-<!-- Modal Perbandingan -->
+<!-- Modal Perbandingan Kriteria -->
 <div class="modal fade" id="modalPerbandingan" tabindex="-1" role="dialog" aria-labelledby="modalPerbandinganTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
@@ -151,6 +152,47 @@
     </div>
   </div>
 </div>
+
+<!-- Modal Perbandingan Alternatif -->
+<div class="modal fade" id="modalPerbandinganAlternatif" tabindex="-1" role="dialog" aria-labelledby="modalPerbandinganAlternatifTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Perbandingan Kriteria</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form action="{{ route('perbandinganAlternatif.update') }}" id="formPerbandinganAlternatif" method="post">
+            @csrf
+            <input type="hidden" name="kriteria_id" id="kriteria_id" value="">
+            @foreach($alternatifs as $p)
+                <div class="row mb-2 k{{ $p->kriteria->id }} pak">
+                    <div class="col-3">
+                        <input type="text" class="form-control" value="{{ $p->alternatif1->alternatif }}" disabled>
+                    </div>
+                    <div class="col-6">
+                        <select name="perbandinganAlternatif[]" class="form-control">
+                            @foreach($pembandings as $pembanding)
+                                <option value="{{ $p->alternatif1->id }}-{{ $p->alternatif2->id }}-{{ $p->kriteria->id }}-{{ $pembanding->id }}" <?= $p->pembanding->id == $pembanding->id ? 'selected' : '' ?>>{{ $pembanding->nama }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col-3">
+                        <input type="text" class="form-control" value="{{ $p->alternatif2->alternatif }}" disabled>
+                    </div>
+                </div>
+            @endforeach
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary">Save</button>
+      </div>
+        </form>
+    </div>
+  </div>
+</div>
 @endsection
 
 @section('script')
@@ -167,6 +209,14 @@
         let nama = $(e.target).data('nama');
         $("#aidi").val(id);
         $("#kriteria").val(nama);
+    });
+
+    $(".perbandingan").click(function(e){
+        let id = $(e.target).data('id');
+        $("#kriteria_id").val(id);
+
+        $(".pak").hide();
+        $(".k"+id).show();
     });
 </script>
 @endsection
