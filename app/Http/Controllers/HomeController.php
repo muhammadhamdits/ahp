@@ -16,7 +16,10 @@ class HomeController extends Controller
         $imax = 0;
         $pks = PerbandinganKriteria::all();
         $pas = PerbandinganAlternatif::all();
-
+        $alternatif = Alternatif::all();
+        $kriteria = Kriteria::all();
+        $best = "-";
+        
         foreach($pks as $pk){
             if($pk->pembanding_id == 1){
                 $status = false;
@@ -105,17 +108,15 @@ class HomeController extends Controller
                 }
                 $prioritasAkhir[] = $rata;
             }
-        }
-        $max = 0;
-        foreach($prioritasAkhir as $key => $p){
-            if($p > $max){
-                $max = $p;
-                $imax = $key;
+            $max = 0;
+            foreach($prioritasAkhir as $key => $p){
+                if($p > $max){
+                    $max = $p;
+                    $imax = $key;
+                }
             }
+            $best = $alternatif[$imax]->alternatif;
         }
-        $alternatif = Alternatif::all();
-        $best = $alternatif[$imax]->alternatif;
-        $kriteria = Kriteria::all();
         
         return view('welcome', compact('status', 'prioritasAkhir', 'alternatif', 'kriteria', 'best'));
     }
