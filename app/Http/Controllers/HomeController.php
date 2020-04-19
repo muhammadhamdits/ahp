@@ -12,6 +12,7 @@ class HomeController extends Controller
 {
     public function index(){
         $status = true;
+        $prioritasAkhir = [];
         $pks = PerbandinganKriteria::all();
         $pas = PerbandinganAlternatif::all();
 
@@ -27,37 +28,88 @@ class HomeController extends Controller
         }
 
         if($status == true){
-            $prioritasKriteria = $this->analisisBerpasanganKriteria();
+            $A = [];
+            foreach(Kriteria::all() as $k){
+                $B = [];
+                foreach(Kriteria::all() as $k2){
+                    if($k->id == $k2->id){
+                        $nilai = 1;
+                    }else{
+                        $nilai = PerbandinganKriteria::where('kriteria_id_1', $k->id)
+                                                    ->where('kriteria_id_2', $k2->id)
+                                                    ->first();
+                        if($nilai){
+                            $nilai = $nilai->pembanding->nilai;
+                        }else{
+                            $nilai = PerbandinganKriteria::where('kriteria_id_1', $k2->id)
+                                                        ->where('kriteria_id_2', $k->id)
+                                                        ->first();
+                            $nilai = 1/$nilai->pembanding->nilai;
+                        }
+                    }
+                    $B[] = $nilai;
+                }
+                $A[] = $B;
+            }
+            $prioritasKriteria = $this->analisisBerpasangan($A);
+
+            $kriteriaAlternatif = [];
+            foreach(Kriteria::all() as $krit){
+                $A = [];
+                foreach(Alternatif::all() as $k){
+                    $B = [];
+                    foreach(Alternatif::all() as $k2){
+                        if($k->id == $k2->id){
+                            $nilai = 1;
+                        }else{
+                            $nilai = PerbandinganAlternatif::where('alternatif_id_1', $k->id)
+                                                        ->where('alternatif_id_2', $k2->id)
+                                                        ->where('kriteria_id', $krit->id)
+                                                        ->first();
+                            if($nilai){
+                                $nilai = $nilai->pembanding->nilai;
+                            }else{
+                                $nilai = PerbandinganAlternatif::where('alternatif_id_1', $k2->id)
+                                                            ->where('alternatif_id_2', $k->id)
+                                                            ->where('kriteria_id', $krit->id)
+                                                            ->first();
+                                $nilai = 1/$nilai->pembanding->nilai;
+                            }
+                        }
+                        $B[] = $nilai;
+                    }
+                    $A[] = $B;
+                }
+                $kriteriaAlternatif[] = $A;
+            }
+
+            $prioritasAlternatif = [];
+            foreach($kriteriaAlternatif as $A){
+                $prioritasAlternatif[] = $this->analisisBerpasangan($A);
+            }
+
+            $matriksAkhir = [];
+            for($i = 0; $i < count($prioritasAlternatif); $i++){
+                $A = [];
+                for($j = 0; $j < count($prioritasAlternatif[$i]); $j++){
+                    $A[] = $prioritasKriteria[$i] * $prioritasAlternatif[$i][$j];
+                }
+                $matriksAkhir[] = $A;
+            }
+
+            for($i = 0; $i < count($matriksAkhir[0]); $i++){
+                $rata = 0;
+                for($j = 0; $j < count($prioritasKriteria); $j++){
+                    $rata += $matriksAkhir[$j][$i];
+                }
+                $prioritasAkhir[] = $rata;
+            }
         }
         
-        return view('welcome', compact('status'));
+        return view('welcome', compact('status', 'prioritasAkhir'));
     }
     
-    public function analisisBerpasanganKriteria(){
-        $A = [];
-        foreach(Kriteria::all() as $k){
-            $B = [];
-            foreach(Kriteria::all() as $k2){
-                if($k->id == $k2->id){
-                    $nilai = 1;
-                }else{
-                    $nilai = PerbandinganKriteria::where('kriteria_id_1', $k->id)
-                                                ->where('kriteria_id_2', $k2->id)
-                                                ->first();
-                    if($nilai){
-                        $nilai = $nilai->pembanding->nilai;
-                    }else{
-                        $nilai = PerbandinganKriteria::where('kriteria_id_1', $k2->id)
-                                                    ->where('kriteria_id_2', $k->id)
-                                                    ->first();
-                        // dd($k2);
-                        $nilai = 1/$nilai->pembanding->nilai;
-                    }
-                }
-                $B[] = $nilai;
-            }
-            $A[] = $B;
-        }
+    public function analisisBerpasangan($A){
         $jumlahKolom = [];
         for($i = 0; $i < count($A); $i++){
             $C = 0;
