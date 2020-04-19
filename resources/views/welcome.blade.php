@@ -60,7 +60,7 @@
             <div class="card-header">
                 <h3 class="card-title">
                     <i class="fas fa-chart-pie mr-1"></i>
-                    Sales
+                    Grafik
                 </h3>
             </div>
 
@@ -68,7 +68,7 @@
                 <div class="tab-content p-0">
                     <div class="chart tab-pane active" id="result" style="position: relative; height: 300px;">
                         @if($status == true)
-                            <canvas id="result-canvas" width="400" height="300">
+                            <canvas id="barChart" width="400" height="300">
                             </canvas>
                         @else
                             <div class="text-center">
@@ -85,7 +85,6 @@
 
 @section('script')
 <script>
-    var ctx = document.getElementById('result-canvas');
     var l = [
         @foreach($alternatif as $a)
             "{{ $a->alternatif }}",
@@ -96,35 +95,7 @@
             {{ $a }},
         @endforeach
     ]
-    // console.log(label);
-    // console.log(data);
-    // var myChart = new Chart(ctx, {
-    //     type: 'line',
-    //     data: {
-    //         labels: l,
-    //         datasets: [{
-    //             label: '# of Votes',
-    //             data: d,
-    //             borderWidth: 1
-    //         }]
-    //     },
-    //     options: {
-    //         scales: {
-    //             yAxes: [{
-    //                 ticks: {
-    //                     beginAtZero: true
-    //                 }
-    //             }]
-    //         }
-    //     }
-    // });
-    // var barChartCanvas = $('#barChart').get(0).getContext('2d')
-    var barChartData = jQuery.extend(true, {}, d)
-    // var temp0 = areaChartData.datasets[0]
-    // var temp1 = areaChartData.datasets[1]
-    // barChartData.datasets[0] = temp1
-    // barChartData.datasets[1] = temp0
-
+    var barChartCanvas = $('#barChart').get(0).getContext('2d')
     var barChartOptions = {
       responsive              : true,
       maintainAspectRatio     : false,
@@ -132,9 +103,17 @@
     }
 
     var barChart = new Chart(barChartCanvas, {
-      type: 'bar', 
-      data: barChartData,
-      options: barChartOptions
+        type: 'bar', 
+        data: {
+            labels: l,
+            datasets: [{
+                label: 'Prioritas',
+                data: d,
+                backgroundColor: "green",
+                borderWidth: 1
+            }]
+        },
+        options: barChartOptions
     })
 </script>
 @endsection
