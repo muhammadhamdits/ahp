@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\PerbandinganKriteria;
 use Illuminate\Http\Request;
+use DB;
 
 class PerbandinganKriteriaController extends Controller
 {
@@ -67,9 +68,14 @@ class PerbandinganKriteriaController extends Controller
      * @param  \App\PerbandinganKriteria  $perbandinganKriteria
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, PerbandinganKriteria $perbandinganKriteria)
+    public function update(Request $request)
     {
-        //
+        foreach($request->perbandingan as $perbandingan){
+            $perbandingan = explode("-", $perbandingan);
+
+            DB::update('update perbandingan_kriterias set pembanding_id = ? where kriteria_id_1 = ? and kriteria_id_2 = ?', [$perbandingan[2], $perbandingan[0], $perbandingan[1]]);
+        }
+        return redirect(route('kriteria.index'));
     }
 
     /**

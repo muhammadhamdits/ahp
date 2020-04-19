@@ -11,6 +11,7 @@ class PembandingSeeder extends Seeder
      */
     public function run()
     {
+        DB::table('pembandings')->insert(['nama' => 'Pilih Nilai Perbandingan...', 'nilai' => 0]);
         DB::table('pembandings')->insert(['nama' => '9x Lebih Penting Dari', 'nilai' => 9]);
         DB::table('pembandings')->insert(['nama' => '8x Lebih Penting Dari', 'nilai' => 8]);
         DB::table('pembandings')->insert(['nama' => '7x Lebih Penting Dari', 'nilai' => 7]);
