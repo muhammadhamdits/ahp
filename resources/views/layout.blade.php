@@ -150,7 +150,7 @@
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 <script src="{{ url('dist/js/pages/dashboard.js') }}"></script>
 <!-- AdminLTE for demo purposes -->
-<script src="{{ url('dist/js/demo.js') }}"></script>
+<!-- <script src="{{ url('dist/js/demo.js') }}"></script> -->
 <script src="{{ url('plugins/datatables/jquery.dataTables.min.js') }}"></script>
 @yield('script')
 </body>

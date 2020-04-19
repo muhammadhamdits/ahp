@@ -14,50 +14,37 @@
 
 @section('content')
 <div class="row">
-    <div class="col-lg-3 col-6">
+    <div class="col-lg-4 col-6">
         <div class="small-box bg-info">
             <div class="inner">
-                <h3>150</h3>
-                <p>New Orders</p>
+                <h3>{{ count($alternatif) }}</h3>
+                <p>Alternatif</p>
             </div>
             <div class="icon">
                 <i class="ion ion-bag"></i>
             </div>
-            <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+            <a href="{{ route('alternatif.index') }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
         </div>
     </div>
 
-    <div class="col-lg-3 col-6">
+    <div class="col-lg-4 col-6">
         <div class="small-box bg-success">
             <div class="inner">
-                <h3>53<sup style="font-size: 20px">%</sup></h3>
-                <p>Bounce Rate</p>
+                <h3>{{ count($kriteria) }}</h3>
+                <p>Kriteria</p>
             </div>
             <div class="icon">
                 <i class="ion ion-stats-bars"></i>
             </div>
-            <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-        </div>
-    </div>
-    
-    <div class="col-lg-3 col-6">
-        <div class="small-box bg-warning">
-            <div class="inner">
-                <h3>44</h3>
-                <p>User Registrations</p>
-            </div>
-            <div class="icon">
-                <i class="ion ion-person-add"></i>
-            </div>
-            <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+            <a href="{{ route('kriteria.index') }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
         </div>
     </div>
 
-    <div class="col-lg-3 col-6">
+    <div class="col-lg-4 col-6">
         <div class="small-box bg-danger">
             <div class="inner">
-                <h3>65</h3>
-                <p>Unique Visitors</p>
+                <h3>{{ $best }}</h3>
+                <p>Alternatif Terbaik</p>
             </div>
             <div class="icon">
                 <i class="ion ion-pie-graph"></i>
@@ -98,71 +85,56 @@
 
 @section('script')
 <script>
-    var ctx = document.getElementById('result-canvas').getContext('2d');
-    var label = [
+    var ctx = document.getElementById('result-canvas');
+    var l = [
         @foreach($alternatif as $a)
             "{{ $a->alternatif }}",
         @endforeach
     ];
-    var data = [
+    var d = [
         @foreach($prioritasAkhir as $a)
             {{ $a }},
         @endforeach
     ]
     // console.log(label);
-    var myChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: label,
-            datasets: [{
-                label: '# of Votes',
-                data: data,
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                    'rgba(255, 159, 64, 0.2)'
-                ],
-                borderColor: [
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)',
-                    'rgba(255, 159, 64, 1)'
-                ],
-                borderWidth: 1
-            }]
-        },
-        options: {
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        beginAtZero: true
-                    }
-                }]
-            }
-        }
-    });
+    // console.log(data);
+    // var myChart = new Chart(ctx, {
+    //     type: 'line',
+    //     data: {
+    //         labels: l,
+    //         datasets: [{
+    //             label: '# of Votes',
+    //             data: d,
+    //             borderWidth: 1
+    //         }]
+    //     },
+    //     options: {
+    //         scales: {
+    //             yAxes: [{
+    //                 ticks: {
+    //                     beginAtZero: true
+    //                 }
+    //             }]
+    //         }
+    //     }
+    // });
     // var barChartCanvas = $('#barChart').get(0).getContext('2d')
-    // var barChartData = jQuery.extend(true, {}, areaChartData)
+    var barChartData = jQuery.extend(true, {}, d)
     // var temp0 = areaChartData.datasets[0]
     // var temp1 = areaChartData.datasets[1]
     // barChartData.datasets[0] = temp1
     // barChartData.datasets[1] = temp0
 
-    // var barChartOptions = {
-    //   responsive              : true,
-    //   maintainAspectRatio     : false,
-    //   datasetFill             : false
-    // }
+    var barChartOptions = {
+      responsive              : true,
+      maintainAspectRatio     : false,
+      datasetFill             : false
+    }
 
-    // var barChart = new Chart(barChartCanvas, {
-    //   type: 'bar', 
-    //   data: barChartData,
-    //   options: barChartOptions
-    // })
+    var barChart = new Chart(barChartCanvas, {
+      type: 'bar', 
+      data: barChartData,
+      options: barChartOptions
+    })
 </script>
 @endsection

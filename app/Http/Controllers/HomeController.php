@@ -105,10 +105,19 @@ class HomeController extends Controller
                 $prioritasAkhir[] = $rata;
             }
         }
-        // dd($prioritasAkhir);
+        $max = 0;
+        $imax;
+        foreach($prioritasAkhir as $key => $p){
+            if($p > $max){
+                $max = $p;
+                $imax = $key;
+            }
+        }
         $alternatif = Alternatif::all();
+        $best = $alternatif[$imax]->alternatif;
+        $kriteria = Kriteria::all();
         
-        return view('welcome', compact('status', 'prioritasAkhir', 'alternatif'));
+        return view('welcome', compact('status', 'prioritasAkhir', 'alternatif', 'kriteria', 'best'));
     }
     
     public function analisisBerpasangan($A){
