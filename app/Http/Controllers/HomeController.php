@@ -13,6 +13,7 @@ class HomeController extends Controller
     public function index(){
         $status = true;
         $prioritasAkhir = [];
+        $imax = 0;
         $pks = PerbandinganKriteria::all();
         $pas = PerbandinganAlternatif::all();
 
@@ -106,7 +107,6 @@ class HomeController extends Controller
             }
         }
         $max = 0;
-        $imax;
         foreach($prioritasAkhir as $key => $p){
             if($p > $max){
                 $max = $p;
