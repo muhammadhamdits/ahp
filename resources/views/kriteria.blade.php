@@ -42,7 +42,7 @@
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $data->kriteria }}</td>
                                 <td>
-                                    <button class="btn btn-info perbandingan" data-id="{{ $data->id }}" data-toggle="modal" data-target="#modalPerbandinganAlternatif">Perbandingan</button>
+                                    <button class="btn btn-info perbandingan" data-id="{{ $data->id }}" data-nama="{{ $data->kriteria }}" data-toggle="modal" data-target="#modalPerbandinganAlternatif">Perbandingan</button>
                                     <button class="btn btn-warning edit" data-id="{{ $data->id }}" data-nama="{{ $data->kriteria }}" data-toggle="modal" data-target="#modalEdit">Edit</button>
                                     <form action="{{ route('kriteria.delete', [$data]) }}" method="post" style="display: inline-block">
                                         @csrf
@@ -158,7 +158,7 @@
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLongTitle">Perbandingan Kriteria</h5>
+        <h5 class="modal-title" id="alternatifTitle">Perbandingan Kriteria</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -213,7 +213,9 @@
 
     $(".perbandingan").click(function(e){
         let id = $(e.target).data('id');
+        let nama = $(e.target).data('nama');
         $("#kriteria_id").val(id);
+        $("#alternatifTitle").html("Perbandingan kriteria "+nama);
 
         $(".pak").hide();
         $(".k"+id).show();

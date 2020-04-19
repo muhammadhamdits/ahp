@@ -13,9 +13,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-})->name('index');
+Route::get('/', 'HomeController@index')->name('index');
 
 Route::get('/kriteria', 'KriteriaController@index')->name('kriteria.index');
 Route::post('/kriteria', 'KriteriaController@store')->name('kriteria.store');
