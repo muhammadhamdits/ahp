@@ -20,6 +20,9 @@ class HomeController extends Controller
         $kriteria = Kriteria::all();
         $best = "-";
         
+        if(count($pks) == 0 || count($pas) == 0){
+            $status = false;
+        }
         foreach($pks as $pk){
             if($pk->pembanding_id == 1){
                 $status = false;
