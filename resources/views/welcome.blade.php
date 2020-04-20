@@ -72,7 +72,7 @@
                             </canvas>
                         @else
                             <div class="text-center">
-                                <span class="badge badge-danger"><h5>Lengkapi Perbandingan Terlebih Dahulu!</h5></span>
+                                <span class="badge badge-danger"><h5>Lengkapi Data/Perbandingan Terlebih Dahulu!</h5></span>
                             </div>
                         @endif
                     </div>
